@@ -29,9 +29,9 @@ app.post('/signin', celebrate({
 }), login);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(validatorLink),
+    // name: Joi.string().min(2).max(30),
+    // about: Joi.string().min(2).max(30),
+    // avatar: Joi.string().pattern(validatorLink),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
     password: Joi.string().required(),
   }),
