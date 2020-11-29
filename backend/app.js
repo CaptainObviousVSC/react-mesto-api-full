@@ -15,13 +15,6 @@ const { requestLogger, errorLogger } = require('./middlewares/Loggers');
 const app = express();
 app.use(cors());
 app.use(requestLogger);
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Max-Age', '86400');
-  next();
-}); 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 mongoose.connect('mongodb://localhost:27017/mestodb-1', {
@@ -29,21 +22,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb-1', {
   useCreateIndex: true,
   useFindAndModify: false,
 });
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    // name: Joi.string().min(2).max(30),
-    // about: Joi.string().min(2).max(30),
-    // avatar: Joi.string().pattern(validatorLink),
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-    password: Joi.string().required(),
-  }),
-}), createUser);
+app.post('/signin', login);
+app.post('/signup', createUser);
 app.use('/', auth, usersRoutes);
 app.use('/', auth, cardsRoutes);
 app.use('/', (req, res) => res.status(404).send({ message: 'Запрашиваемый ресурс не найден' }));
