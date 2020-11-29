@@ -108,9 +108,9 @@ export class Api {
   }
 }
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-14',
+  baseUrl: 'http://api.capobvious.azik.students.nomoreparties.xyz',
   headers: {
-    authorization: '56ec9a7b-ee96-4d3a-a0c8-688e4ca62fd8',
+    authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxNzVkZDAwYmY0ODRmOTAyMTgxNTIiLCJpYXQiOjE2MDY2MDYzMDAsImV4cCI6MTYwNzIxMTEwMH0.WHwfJVlufdOSGdzkv5Ks2j7Zl2CmxQm4NxMSSfpRRTY',
     'Content-Type': 'application/json'
   }
 })
