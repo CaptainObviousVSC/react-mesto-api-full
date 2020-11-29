@@ -115,5 +115,3 @@ const api = new Api({
   }
 })
 export default api
-// https://yandex.ru/images/search?p=1&text=%D1%8F+%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB+%D0%BC%D0%B5%D0%BC+%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%81%D1%82&pos=79&rpt=simage&img_url=https%3A%2F%2Fcs6.pikabu.ru%2Fpost_img%2Fbig%2F2014%2F10%2F13%2F11%2F1413219813_1340057670.png&from=tabbar
-//   https://yandex.ru/images/search?p=2&text=%D1%8F+%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB+%D0%BC%D0%B5%D0%BC+%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%81%D1%82&pos=86&rpt=simage&img_url=https%3A%2F%2Fcs8.pikabu.ru%2Fpost_img%2F2016%2F06%2F02%2F7%2Fog_og_1464867407239442559.jpg&from=tabbar
