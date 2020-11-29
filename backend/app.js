@@ -15,7 +15,13 @@ const { requestLogger, errorLogger } = require('./middlewares/Loggers');
 const app = express();
 app.use(cors());
 app.use(requestLogger);
-
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Max-Age', '86400');
+  next();
+}); 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 mongoose.connect('mongodb://localhost:27017/mestodb-1', {
