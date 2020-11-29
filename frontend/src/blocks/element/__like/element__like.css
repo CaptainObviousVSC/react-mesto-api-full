@@ -1,0 +1,14 @@
+@import url(./_active/element__like_active.css);
+.element__like {
+    background-image: url(../../../images/like.svg);
+    min-width: 23px;
+    min-height: 21px;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none;
+    border: none;
+}
+.element__like:hover {
+    opacity: 0.6;
+}

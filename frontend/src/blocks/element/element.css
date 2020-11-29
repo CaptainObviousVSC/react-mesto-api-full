@@ -1,0 +1,17 @@
+@import url(./__img/element__img.css);
+@import url(./__like/element__like.css);
+@import url(./__textbox/element__textbox.css);
+@import url(./__title/element__title.css);
+@import url(./__remove/element__remove.css);
+@import url(./__counter/element__counter.css);
+.element {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 282px;
+    height: 362px;
+    border: 1px solid #000000;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+}

@@ -1,0 +1,11 @@
+@import url(./_add/popup__form_add.css);
+@import url(./_avatar/popup__form_avatar.css);
+@import url(./_confirm/popup__form_confirm.css);
+.popup__form {
+    display: flex;
+    flex-direction: column;
+    border: none;
+    margin: 0 auto;
+    max-width: 358px;
+    padding: 0;
+}

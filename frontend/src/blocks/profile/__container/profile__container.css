@@ -1,0 +1,9 @@
+.profile__container {
+    max-width: 300px;
+}
+@media all and (max-width: 910px) {
+    .profile__container {
+        max-width: 270px;
+
+    }
+  }

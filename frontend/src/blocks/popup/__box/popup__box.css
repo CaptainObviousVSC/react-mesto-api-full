@@ -1,0 +1,9 @@
+.popup__box {
+    display: flex;
+    flex-direction: column-reverse;
+    position: relative;
+    width: auto;
+    height: auto;
+    box-sizing: border-box;
+    background-color: transparent;
+}

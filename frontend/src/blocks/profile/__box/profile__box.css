@@ -1,0 +1,10 @@
+.profile__box {
+    display: flex;
+    flex-direction: row;
+    }
+    
+    @media all and (max-width: 610px) {
+        .profile__box {
+            flex-direction: column;
+        }
+    }

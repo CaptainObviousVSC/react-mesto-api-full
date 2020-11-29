@@ -1,0 +1,29 @@
+@import url(./_disabled/popup__save_disabled.css);
+@import url(./_add/popup__save_add.css);
+@import url(./_avatar/popup__save_avatar.css);
+.popup__save{
+    width: 358px;
+    height: 51px;
+    background: black;
+    border-radius: 10px;
+    margin-top: 48px;
+    margin-bottom: 37px;
+    border: none;
+    color: white;
+    padding: 0;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+}
+.popup__save:hover {
+    opacity: 0.6;
+}
+@media all and (max-width:450px) {
+    .popup__save {
+        max-width: 200px;
+        margin-left: 25px;
+        margin-right: 25px;
+    }
+}

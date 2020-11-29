@@ -1,0 +1,27 @@
+.profile__add {
+    width: 150px;
+    height: 50px;
+    border: 1px solid #FFFFFF;
+    background-color: black;
+    color: white;
+    background-image: url("../../../images/plus.svg");
+    background-repeat: no-repeat;
+    box-shadow: none;
+    background-position: center;
+    background-size: auto;
+   
+}
+@media all and (max-width: 910px) {
+    .profile__add {
+        width: 100px;
+        height: 43px;
+    }
+  }
+  @media all and (max-width: 610px) {
+    .profile__add {
+        width: 100%;
+    }
+}
+.profile__add:hover {
+    opacity: 0.6;
+}

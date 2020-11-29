@@ -1,0 +1,15 @@
+@import url(./_avatar/popup__container_avatar.css);
+@import url(./_confirm/popup__container_confirm.css);
+.popup__container {
+    position: relative;
+    width: 430px;
+    min-height: 330px;
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 10px;
+}
+@media all and (max-width:450px) {
+    .popup__container {
+        max-width: 250px;
+    }
+}

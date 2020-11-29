@@ -1,0 +1,31 @@
+@import url(./__signin-link/header__signin-link.css);
+@import url(./__signup-link/header__signup-link.css);
+@import url(./__signout-link/header__signout-link.css);
+@import url(./__email/header__email.css);
+@import url(./__logo/header__logo.css);
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #545454;
+    padding-top: 45px;
+    padding-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    width: 882px;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+  }
+@media all and (max-width: 910px) {
+    .header {
+        max-width: 590px;
+    }
+  }
+  @media all and (max-width: 320px) {
+    .header {
+        margin-top: 28px;
+        margin-bottom: 39px;
+    }
+  } 
