@@ -13,7 +13,7 @@ const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/Loggers'); 
 
 const app = express();
-app.use(cors())
+app.use(cors());
 app.use(requestLogger);
 
 app.use(bodyParser.json());

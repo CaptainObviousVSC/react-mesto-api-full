@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://api.capobvious.azik.students.nomoreparties.xyz'
+export const BASE_URL = 'https://api.capobvious.azik.students.nomoredomains.monster'
 function getRegister(password, email) {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
