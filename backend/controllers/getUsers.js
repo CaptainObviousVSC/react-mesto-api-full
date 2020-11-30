@@ -115,7 +115,7 @@ const login = (req, res, next) => {
         return bcrypt.compare(password, user.password).then((matched) => {
           const token = jwt.sign({
             _id: user._id
-          }, 'some-secret-key', { expiresIn: '7d' });
+          }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
           if (!matched) {
             next(new LoginError('Неправильные почта или пароль'));
           }
