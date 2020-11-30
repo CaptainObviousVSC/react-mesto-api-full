@@ -5,6 +5,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ServerError = require('../errors/ServerError');
 const LoginError = require('../errors/LoginError');
+require('dotenv').config();
 
 const getUsers = (req, res, next) => {
   User.find({}).orFail(() => {
@@ -108,26 +109,23 @@ const createUser = (req, res, next) => {
 };
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (user) {
-        const token = jwt.sign({
-  _id: user._id 
-}, 'some-secret-key', { expiresIn: '7d' });
-      return bcrypt.compare(password, user.password);
+        return bcrypt.compare(password, user.password).then((matched) => {
+          const token = jwt.sign({
+            _id: user._id
+          }, 'some-secret-key', { expiresIn: '7d' });
+          if (!matched) {
+            next(new LoginError('Неправильные почта или пароль'));
+          }
+          res.send({ token });
+        })
       }
       return Promise.reject(new LoginError('Неправильные почта или пароль'));
     })
-    .then((matched) => {
-      if (!matched) {
-        next(new LoginError('Неправильные почта или пароль'));
-      }
-
-      res.send({ message: 'Всё верно!' });
-    })
-    .catch(next());
-}; 
+    .catch(next);
+};
 module.exports = {
   getUsers, getUserId, createUser, updateUserAvatar, updateUser, login, getUserInfo
 };

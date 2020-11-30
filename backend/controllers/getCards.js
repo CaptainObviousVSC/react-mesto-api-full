@@ -4,11 +4,7 @@ const BadRequestError = require('../errors/BadRequestError');
 const ServerError = require('../errors/ServerError');
 
 const getCards = (req, res, next) => {
-  Card.find({}).populate('owner').orFail(() => {
-    const err = new Error('Невозможно получить карточки');
-    err.statusCode = 404;
-    throw err;
-  }).then((data) => res.send(data))
+  Card.find({}).then((data) => res.send(data))
       .catch((err) => {
       if (err.kind === 'ObjectId') {
         next(new BadRequestError('Невалидный ID'))

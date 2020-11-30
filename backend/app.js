@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const { validatorLink } = require('./utils/validators');
 const { celebrate, Joi, errors } = require('celebrate');
 const cors = require('cors')
+require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
 const usersRoutes = require('./routes/users');
