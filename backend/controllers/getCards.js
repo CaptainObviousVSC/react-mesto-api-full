@@ -12,7 +12,7 @@ const getCards = (req, res, next) => {
       if (err.statusCode === 404) {
   next(new NotFoundError('Невозможно получить карточки'))
       }
-     next();
+     next(err);
     });
 };
 const deleteCard = (req, res, next) => {
