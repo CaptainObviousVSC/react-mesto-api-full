@@ -7,6 +7,7 @@ const ServerError = require('../errors/ServerError');
 const LoginError = require('../errors/LoginError');
 require('dotenv').config();
 
+const { NODE_ENV, JWT_SECRET } = process.env
 const getUsers = (req, res, next) => {
   User.find({}).orFail(() => {
     throw new NotFoundError('Невозможно получить пользователя');
@@ -122,7 +123,7 @@ const login = (req, res, next) => {
           res.send({ token });
         })
       }
-      return Promise.reject(new LoginError('Неправильные почта или пароль'));
+      throw new LoginError('Неправильные почта или пароль');
     })
     .catch(next);
 };
