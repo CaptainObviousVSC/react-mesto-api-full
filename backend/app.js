@@ -12,7 +12,6 @@ const cardsRoutes = require('./routes/cards');
 const { createUser, login } = require('./controllers/getUsers');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/Loggers'); 
-
 const app = express();
 app.use(cors());
 app.use(requestLogger);

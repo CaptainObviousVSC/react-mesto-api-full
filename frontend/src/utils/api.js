@@ -110,7 +110,7 @@ export class Api {
 const api = new Api({
   baseUrl: 'https://api.capobvious.azik.students.nomoredomains.monster',
   headers: {
-    authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxNzVkZDAwYmY0ODRmOTAyMTgxNTIiLCJpYXQiOjE2MDY2MDYzMDAsImV4cCI6MTYwNzIxMTEwMH0.WHwfJVlufdOSGdzkv5Ks2j7Zl2CmxQm4NxMSSfpRRTY',
+    'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json'
   }
 })

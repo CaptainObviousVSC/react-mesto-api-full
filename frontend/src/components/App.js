@@ -29,14 +29,15 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([])
   const [status, setStatus] = React.useState({})
+  const [token, setToken] = React.useState({})
     React.useEffect(() => {
       handleTokenCheck()
-        api.getInformation().then((data) => {
+        api.getInformation(token).then((data) => {
             setCurrentUser(data)
         }).catch(err => console.error(err))
     }, [])
     React.useEffect(() => {
-        api.getCards().then((data) => {
+        api.getCards(token).then((data) => {
             setCards(data)
         }).catch(err => console.error(err))
     }, [])
@@ -44,13 +45,13 @@ function App() {
     setIsConfirmPopupOpen(true)
   }
   function handleCardLike(cardId) {
-    api.likeCard(cardId).then((newCard) => {
+    api.likeCard(cardId, token).then((newCard) => {
       const newCards = cards.map((item) => item._id === cardId ? newCard : item)
       setCards(newCards);
     }).catch(err => console.error(err))
   }
   function handleAddPlaceClick(item) {
-    api.createCard(item).then((item) => {
+    api.createCard(item, token).then((item) => {
       setCards([item, ...cards])
       setIsAddPopupOpen(false)
     }).catch(err => console.error(err))
@@ -123,25 +124,25 @@ function App() {
     history.push('/signin')
   }
   function handleCardDislike(cardId) {
-    api.dislikeCard(cardId).then((newCard) => {
+    api.dislikeCard(cardId, token).then((newCard) => {
       const newCards = cards.map((item) => item._id === cardId ? newCard : item)
       setCards(newCards);
     }).catch(err => console.error(err))
   }
   function handleCardDelete(cardId) {
-    api.deleteCard(cardId).then(() => {
+    api.deleteCard(cardId, token).then(() => {
       const newCards = cards.filter(item => item._id !== cardId)
       setCards(newCards);
     }).catch(err => console.error(err))
   }
   function handleUpdateUser(item) {
-    api.editInformation(item).then((item) => {
+    api.editInformation(item, token).then((item) => {
       setCurrentUser({ ...currentUser, name: item.name, about: item.about })
       setIsProfilePopupOpen(false)
     }).catch(err => console.error(err))
   }
   function handleUpdateAvatar(item) {
-    api.editAvatar(item).then((item) => {
+    api.editAvatar(item, token).then((item) => {
       setCurrentUser({ ...currentUser, avatar: item.avatar })
       setIsAvatarPopupOpen(false)
     }).catch(err => console.error(err))
