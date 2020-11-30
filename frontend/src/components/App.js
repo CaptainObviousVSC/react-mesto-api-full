@@ -44,13 +44,13 @@ function App() {
   function handleConfirmDeleteClick() {
     setIsConfirmPopupOpen(true)
   }
-  function handleCardLike(cardId) {
+  function handleCardLike(cardId, token) {
     api.likeCard(cardId, token).then((newCard) => {
       const newCards = cards.map((item) => item._id === cardId ? newCard : item)
       setCards(newCards);
     }).catch(err => console.error(err))
   }
-  function handleAddPlaceClick(item) {
+  function handleAddPlaceClick(item, token) {
     api.createCard(item, token).then((item) => {
       setCards([item, ...cards])
       setIsAddPopupOpen(false)
@@ -123,25 +123,25 @@ function App() {
     setIsLoggedIn(false)
     history.push('/signin')
   }
-  function handleCardDislike(cardId) {
+  function handleCardDislike(cardId, token) {
     api.dislikeCard(cardId, token).then((newCard) => {
       const newCards = cards.map((item) => item._id === cardId ? newCard : item)
       setCards(newCards);
     }).catch(err => console.error(err))
   }
-  function handleCardDelete(cardId) {
+  function handleCardDelete(cardId, token) {
     api.deleteCard(cardId, token).then(() => {
       const newCards = cards.filter(item => item._id !== cardId)
       setCards(newCards);
     }).catch(err => console.error(err))
   }
-  function handleUpdateUser(item) {
+  function handleUpdateUser(item, token) {
     api.editInformation(item, token).then((item) => {
       setCurrentUser({ ...currentUser, name: item.name, about: item.about })
       setIsProfilePopupOpen(false)
     }).catch(err => console.error(err))
   }
-  function handleUpdateAvatar(item) {
+  function handleUpdateAvatar(item, token) {
     api.editAvatar(item, token).then((item) => {
       setCurrentUser({ ...currentUser, avatar: item.avatar })
       setIsAvatarPopupOpen(false)

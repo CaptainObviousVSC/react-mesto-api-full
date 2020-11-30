@@ -1,15 +1,18 @@
 
 export class Api {
-  constructor({ baseUrl, headers }) {
+  constructor({ baseUrl }) {
     this.baseUrl = baseUrl
-    this.headers = headers
+
   }
   getAppInfo() {
     return Promise.all([this.getCards(), this.getInformation()])
   }
-  getInformation() {
+  getInformation(token) {
     return fetch(`${this.baseUrl}/users/me`, {
-      headers: this.headers
+       headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
     })
       .then(res => {
         if (res.ok) {
@@ -18,10 +21,13 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
       })
   }
-  editInformation(item) {
+  editInformation(item, token) {
     return fetch(`${this.baseUrl}/users/me`, {
       method: 'PATCH',
-      headers: this.headers,
+       headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
       body: JSON.stringify({name: item.name, about: item.about})
     })
       .then(res => {
@@ -31,9 +37,12 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
       })
   }
-  getCards() {
+  getCards(token) {
     return fetch(`${this.baseUrl}/cards`, {
-      headers: this.headers
+       headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
     })
       .then(res => {
         if (res.ok) {
@@ -42,10 +51,13 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
       })
   }
-  likeCard(cardId) {
+  likeCard(cardId, token) {
     return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
       method: 'PUT',
-      headers: this.headers
+      headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
     })
       .then(res => {
         if (res.ok) {
@@ -54,10 +66,13 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
       })
   }
-  dislikeCard(cardId) {
+  dislikeCard(cardId, token) {
     return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
       method: 'DELETE',
-      headers: this.headers
+       headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
     })
       .then(res => {
         if (res.ok) {
@@ -66,10 +81,13 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
       })
   }
-  deleteCard(cardId) {
+  deleteCard(cardId, token) {
     return fetch(`${this.baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
-      headers: this.headers
+      headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
     }).then(res => {
       if (res.ok) {
         return res.json()
@@ -77,10 +95,13 @@ export class Api {
       return Promise.reject(`Ошибка: ${res.status}`)
     })
   }
-  createCard(item) {
+  createCard(item, token) {
     return fetch(`${this.baseUrl}/cards`, {
       method: 'POST',
-      headers: this.headers,
+      headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
       body: JSON.stringify({
         name: item.name,
         link: item.link
@@ -93,10 +114,13 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
       })
   }
-  editAvatar(item) {
+  editAvatar(item, token) {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: 'PATCH',
-      headers: this.headers,
+       headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
       body: JSON.stringify({ avatar: item.avatar })
     })
       .then(res => {
@@ -108,10 +132,6 @@ export class Api {
   }
 }
 const api = new Api({
-  baseUrl: 'https://api.capobvious.azik.students.nomoredomains.monster',
-  headers: {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
+  baseUrl: 'https://api.capobvious.azik.students.nomoredomains.monster'
 })
 export default api
