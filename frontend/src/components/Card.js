@@ -2,7 +2,7 @@ import React from 'react'
 function Card({ card, onCardClick, onCardDelete, onCardLike, currentUser, onCardDislike }) {
   const isOwn = card.owner._id === currentUser._id;
   const cardDeleteButton = (
-    `card__delete-button ${isOwn ? 'element__remove' : ''}`
+    `element__remove ${isOwn ? 'element__remove' : ''}`
   );
   const isLiked = card.likes.some(i => i._id === currentUser._id);
 

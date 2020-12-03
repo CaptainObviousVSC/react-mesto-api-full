@@ -52,12 +52,12 @@ export class Api {
       })
   }
   likeCard(cardId, token) {
-    return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+    return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
       headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-        }
+        },
     })
       .then(res => {
         if (res.ok) {
@@ -67,12 +67,12 @@ export class Api {
       })
   }
   dislikeCard(cardId, token) {
-    return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+    return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
        headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-        }
+        },
     })
       .then(res => {
         if (res.ok) {
@@ -81,13 +81,13 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
       })
   }
-  deleteCard(cardId, token) {
+  deleteCard( cardId, token) {
     return fetch(`${this.baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-        }
+        },
     }).then(res => {
       if (res.ok) {
         return res.json()

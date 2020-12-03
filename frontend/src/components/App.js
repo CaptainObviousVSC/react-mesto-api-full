@@ -29,44 +29,33 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([])
   const [status, setStatus] = React.useState({})
-  const [token, setToken] = React.useState({})
-    React.useEffect(() => {
-      handleTokenCheck()
-        api.getInformation(jwt).then((data) => {
-            setCurrentUser(data)
-        }).catch(err => console.error(err))
-    }, [])
-    React.useEffect(() => {
-        api.getCards(jwt).then((data) => {
-            setCards(data)
-        }).catch(err => console.error(err))
-    }, [])
-  function handleConfirmDeleteClick() {
-    setIsConfirmPopupOpen(true)
-  }
-  function handleCardLike(cardId, jwt) {
-    api.likeCard(cardId, jwt).then((newCard) => {
-      const newCards = cards.map((item) => item._id === cardId ? newCard : item)
-      setCards(newCards);
-    }).catch(err => console.error(err))
-  }
-  function handleAddPlaceClick(item, jwt) {
-    api.createCard(item, jwt).then((item) => {
-      setCards([item, ...cards])
-      setIsAddPopupOpen(false)
-    }).catch(err => console.error(err))
-  }
-  function handleInfoTooltip() {
-    console.log('hi')
-    setIsInfoTooltip(true)
+  // const [token, setToken] = React.useState({})
+   function onLogin(email, password) {
+    auth.getLogin(email, password)
+      .then((data) => {
+        localStorage.setItem('jwt', data.token)
+        setIsLoggedIn(true)
+         setEmail(email)
+        history.push('/')
+      }).catch(err => {
+        console.log(err.status) 
+        if(err.status === 400) {
+          setIsLoggedIn(false)
+         return console.log('не передано одно из полей')
+      }
+        else if(err.status === 401) {
+          setIsLoggedIn(false)
+       return console.log('пользователь с email не найден')
+      }
+      return console.log('error 500')
+    })
   }
   function handleTokenCheck() {
     const jwt = localStorage.getItem('jwt')
     if (jwt) {
       auth.checkToken(jwt).then((data) => {
-        console.log(jwt)
         if(data) {
-            setEmail(data.data.email)
+            setEmail(data.email)
           setIsLoggedIn(true)
           history.push('/')
         }
@@ -82,27 +71,37 @@ function App() {
     })
     }
   }
-  function onLogin(email, password) {
-    auth.getLogin(email, password)
-      .then((data) => {
-        localStorage.setItem('jwt', data.token)
-        console.log(data.token)
-        setIsLoggedIn(true)
-         setEmail(email)
-        history.push('/')
-        handleTokenCheck()
-      }).catch(err => {
-        console.log(err.status) 
-        if(err.status === 400) {
-          setIsLoggedIn(false)
-         return console.log('не передано одно из полей')
-      }
-        else if(err.status === 401) {
-          setIsLoggedIn(false)
-       return console.log('пользователь с email не найден')
-      }
-      return console.log('error 500')
-    })
+  React.useEffect(() => {
+      handleTokenCheck()
+    }, [])
+      React.useEffect(() => {
+    if(isLoggedIn) {
+       const jwt = localStorage.getItem('jwt')
+      api.getCards(jwt).then((data) => {
+        setCards(data)
+      })
+      api.getInformation(jwt).then((data) => {
+        setCurrentUser(data)
+      })
+       }
+    return
+    }, [isLoggedIn])
+  function handleConfirmDeleteClick() {
+    setIsConfirmPopupOpen(true)
+  }
+  function handleAddPlaceClick(item) {
+     if(isLoggedIn) {
+       const jwt = localStorage.getItem('jwt')
+      api.createCard(item, jwt).then((item) => {
+        console.log(item)
+      setCards([item, ...cards])
+      setIsAddPopupOpen(false)
+       }).catch(err => console.error(err))
+    }
+  }
+  function handleInfoTooltip() {
+    console.log('hi')
+    setIsInfoTooltip(true)
   }
   function onRegister(email, password) {
     auth.getRegister(password, email).then(() => {
@@ -123,29 +122,53 @@ function App() {
     setIsLoggedIn(false)
     history.push('/signin')
   }
-  function handleCardDislike(cardId, jwt) {
-    api.dislikeCard(cardId, jwt).then((newCard) => {
+   function handleCardLike(cardId) {
+     if(isLoggedIn) {
+       const jwt = localStorage.getItem('jwt')
+         api.likeCard(cardId, jwt).then((newCard) => {
       const newCards = cards.map((item) => item._id === cardId ? newCard : item)
       setCards(newCards);
     }).catch(err => console.error(err))
+    }
   }
-  function handleCardDelete(cardId, jwt) {
-    api.deleteCard(cardId, jwt).then(() => {
-      const newCards = cards.filter(item => item._id !== cardId)
+  function handleCardDislike(cardId) {
+       if(isLoggedIn) {
+       const jwt = localStorage.getItem('jwt')
+       api.dislikeCard(cardId, jwt).then((newCard) => {
+      const newCards = cards.map((item) => item._id === cardId ? newCard : item)
+      setCards(newCards);
+    }).catch(err => console.error(err))
+    }
+  }
+  function handleCardDelete(cardId) {
+     if(isLoggedIn) {
+       const jwt = localStorage.getItem('jwt')
+        api.deleteCard(cardId, jwt).then(() => {
+          console.log(cards)
+      const newCards = cards.filter((item) => item._id !== cardId)
       setCards(newCards);
     }).catch(err => console.error(err))
   }
-  function handleUpdateUser(item, jwt) {
-    api.editInformation(item, jwt).then((item) => {
-      setCurrentUser({ ...currentUser, name: item.name, about: item.about })
+  }
+  function handleUpdateUser(item) {
+     if(isLoggedIn) {
+       const jwt = localStorage.getItem('jwt')
+       console.log(jwt)
+       api.editInformation(item, jwt).then((item) => {
+      setCurrentUser({ ...currentUser, name: item.data.name, about: item.data.about })
       setIsProfilePopupOpen(false)
     }).catch(err => console.error(err))
+       }
   }
-  function handleUpdateAvatar(item, jwt) {
-    api.editAvatar(item, jwt).then((item) => {
-      setCurrentUser({ ...currentUser, avatar: item.avatar })
+  function handleUpdateAvatar(item) {
+       if(isLoggedIn) {
+       const jwt = localStorage.getItem('jwt')
+       api.editAvatar(item, jwt).then((item) => {
+         console.log(item)
+     setCurrentUser({ ...currentUser, avatar: item.data.avatar })
       setIsAvatarPopupOpen(false)
     }).catch(err => console.error(err))
+       }
   }
   function closePopups() {
     setIsAvatarPopupOpen(false)
