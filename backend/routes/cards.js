@@ -33,5 +33,5 @@ router.delete('/cards/:cardId/likes', celebrate({
     cardId: Joi.string().required().max(24),
   }),
 }), deleteLike);
-router.use(errors())
+router.use(errors());
 module.exports = router;

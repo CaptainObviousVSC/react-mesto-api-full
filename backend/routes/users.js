@@ -6,7 +6,7 @@ const {
 const { validatorLink } = require('../utils/validators');
 
 router.get('/users', celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(validatorLink),
@@ -15,14 +15,14 @@ router.get('/users', celebrate({
   }),
 }), getUsers);
 router.get('/users/me', celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(validatorLink),
     _id: Joi.string().required().max(24),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
   }),
-}), getUserInfo)
+}), getUserInfo);
 router.get('/users/:_id', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -43,5 +43,5 @@ router.patch('/users/me', celebrate({
     about: Joi.string().required().min(2).max(30),
   }),
 }), updateUser);
-router.use(errors())
+router.use(errors());
 module.exports = router;

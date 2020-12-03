@@ -1,18 +1,17 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
-const ServerError = require('../errors/ServerError');
 
 const getCards = (req, res, next) => {
   Card.find({}).then((data) => res.send(data))
-      .catch((err) => {
+    .catch((err) => {
       if (err.kind === 'ObjectId') {
-        next(new BadRequestError('Невалидный ID'))
+        next(new BadRequestError('Невалидный ID'));
       }
       if (err.statusCode === 404) {
-  next(new NotFoundError('Невозможно получить карточки'))
+        next(new NotFoundError('Невозможно получить карточки'));
       }
-     next(err);
+      next(err);
     });
 };
 const deleteCard = (req, res, next) => {
@@ -24,13 +23,13 @@ const deleteCard = (req, res, next) => {
     })
     .then((card) => {
       if (card.owner.toString() === userId) {
-        Card.findByIdAndRemove(cardId).then(card => res.status(200).send(card))
+        Card.findByIdAndRemove(cardId).then((cards) => res.status(200).send(cards));
       } else {
-         throw new BadRequestError('Нельзя удалять чужую карточку');
+        throw new BadRequestError('Нельзя удалять чужую карточку');
       }
     })
     .catch(() => {
-    next();
+      next();
     });
 };
 const addLike = (req, res, next) => {
@@ -43,12 +42,12 @@ const addLike = (req, res, next) => {
   }).then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.kind === 'ObjectId') {
-        next(new BadRequestError('Невалидный ID'))
+        next(new BadRequestError('Невалидный ID'));
       }
       if (err.statusCode === 404) {
-  next(new NotFoundError('Невозможно поставить лайк'))
+        next(new NotFoundError('Невозможно поставить лайк'));
       }
-     next();
+      next();
     });
 };
 const deleteLike = (req, res, next) => {
@@ -59,14 +58,14 @@ const deleteLike = (req, res, next) => {
     err.statusCode = 404;
     throw err;
   }).then((card) => res.send(card))
-      .catch((err) => {
+    .catch((err) => {
       if (err.kind === 'ObjectId') {
-        next(new BadRequestError('Невалидный ID'))
+        next(new BadRequestError('Невалидный ID'));
       }
       if (err.statusCode === 404) {
-  next(new NotFoundError('Невозможно убрать лайк'))
+        next(new NotFoundError('Невозможно убрать лайк'));
       }
-     next();
+      next();
     });
 };
 const postCards = (req, res, next) => {
@@ -77,7 +76,7 @@ const postCards = (req, res, next) => {
       if (err.name === 'ValidationError') {
         const errorList = Object.keys(err.errors);
         const messages = errorList.map((item) => err.errors[item].message);
-        next(new BadRequestError(`Ошибка валидации: ${messages.join(' ')}`))
+        next(new BadRequestError(`Ошибка валидации: ${messages.join(' ')}`));
       } else {
         next();
       }

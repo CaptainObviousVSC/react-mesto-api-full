@@ -20,11 +20,11 @@ const userSchema = new mongoose.Schema({
     validate: validatorLink,
     default: link,
   },
-    email: {
+  email: {
     type: String,
     required: true,
     unique: true,
-    validate: validatorEmail, 
+    validate: validatorEmail,
   },
   password: {
     type: String,

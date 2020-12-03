@@ -1,32 +1,29 @@
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
-const ServerError = require('../errors/ServerError');
 const LoginError = require('../errors/LoginError');
 require('dotenv').config();
 
-const { NODE_ENV, JWT_SECRET } = process.env
+const { NODE_ENV, JWT_SECRET } = process.env;
 const getUsers = (req, res, next) => {
   User.find({}).orFail(() => {
     throw new NotFoundError('Невозможно получить пользователя');
-    err.statusCode = 404;
   }).then((data) => res.send(data))
     .catch((err) => {
       if (err.kind === 'ObjectId') {
-       next(new BadRequestError('Невалидный ID'));
+        next(new BadRequestError('Невалидный ID'));
       }
       if (err.statusCode === 404) {
-       next(new NotFoundError('Невозможно получить пользователей'));
+        next(new NotFoundError('Невозможно получить пользователей'));
       }
-     next();
+      next();
     });
 };
 const getUserId = (req, res, next) => {
   User.findById(req.params._id).orFail(() => {
     throw new NotFoundError('Невозможно получить пользователя');
-    err.statusCode = 404;
   }).then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.kind === 'ObjectId') {
@@ -35,7 +32,7 @@ const getUserId = (req, res, next) => {
       if (err.statusCode === 404) {
         next(new NotFoundError('Невозможно получить пользователя'));
       }
-     next();
+      next();
     });
 };
 const updateUserAvatar = (req, res, next) => {
@@ -43,7 +40,6 @@ const updateUserAvatar = (req, res, next) => {
   const { _id } = req.user;
   User.findByIdAndUpdate(_id, { avatar }, { runValidators: true, new: true }).orFail(() => {
     throw new NotFoundError('Невозможно обновит аватар');
-    err.statusCode = 404;
   }).then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -56,17 +52,16 @@ const updateUserAvatar = (req, res, next) => {
     });
 };
 const getUserInfo = (req, res, next) => {
-  const {_id} = req.user
+  const { _id } = req.user;
   User.findById(_id).orFail(() => {
-   throw new NotFoundError('Невозможно получить информацию о пользователе');
-    err.statusCode = 404;
+    throw new NotFoundError('Невозможно получить информацию о пользователе');
   }).then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.kind === 'ObjectId') {
-         next(new BadRequestError('Невалидный ID'));
+        next(new BadRequestError('Невалидный ID'));
       }
       if (err.statusCode === 404) {
-        next(new NotFoundError('Невозможно получить информацию о пользователе'))
+        next(new NotFoundError('Невозможно получить информацию о пользователе'));
       }
       next();
     });
@@ -75,8 +70,7 @@ const updateUser = (req, res, next) => {
   const { name, about } = req.body;
   const { _id } = req.user;
   User.findByIdAndUpdate(_id, { name, about }, { runValidators: true, new: true }).orFail(() => {
-   throw new NotFoundError('Невозможно обновить пользователя');
-    err.statusCode = 404;
+    throw new NotFoundError('Невозможно обновить пользователя');
   })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
@@ -92,16 +86,18 @@ const updateUser = (req, res, next) => {
     });
 };
 const createUser = (req, res, next) => {
-  const { name, about, avatar} = req.body;
+  const { name, about, avatar } = req.body;
   bcrypt.hash(req.body.password, 10)
- .then((hash) => User.create({ name, about, avatar, email: req.body.email, password: hash })).then((user) => res.send(user))
+    .then((hash) => User.create({
+      name, about, avatar, email: req.body.email, password: hash,
+    })).then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const errorList = Object.keys(err.errors);
         const messages = errorList.map((item) => err.errors[item].message);
         next(new BadRequestError(`Ошибка валидации: ${messages.join(' ')}`));
       } else {
-       next(err);
+        next(new BadRequestError('не заполнено одно из полей или заполнено не правильно'));
       }
     });
 };
@@ -112,18 +108,18 @@ const login = (req, res, next) => {
       if (user) {
         return bcrypt.compare(password, user.password).then((matched) => {
           const token = jwt.sign({
-            _id: user._id
+            _id: user._id,
           }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
           if (!matched) {
             next(new LoginError('Неправильные почта или пароль'));
           }
           res.send({ token });
-        })
+        });
       }
       throw new LoginError('Неправильные почта или пароль');
     })
     .catch(next);
 };
 module.exports = {
-  getUsers, getUserId, createUser, updateUserAvatar, updateUser, login, getUserInfo
+  getUsers, getUserId, createUser, updateUserAvatar, updateUser, login, getUserInfo,
 };
