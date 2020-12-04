@@ -17,7 +17,7 @@ app.use(cors());
 app.use(requestLogger);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-mongoose.connect('mongodb://localhost:27017/mestodb-1', {
+mongoose.connect('mongodb://localhost:27017/mestodb-2', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -41,11 +41,9 @@ app.use((err, req, res, next) => {
 app.use((err, req, res) => {
   const { statusCode = 500, message } = err;
 
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'На сервере произошла ошибка'
+      : message,
+  });
 });

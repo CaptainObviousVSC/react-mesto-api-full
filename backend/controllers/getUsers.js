@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const LoginError = require('../errors/LoginError');
+const RegistrError = require('../errors/RegistrError');
 require('dotenv').config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -86,18 +87,31 @@ const updateUser = (req, res, next) => {
     });
 };
 const createUser = (req, res, next) => {
-  const { name, about, avatar } = req.body;
-  bcrypt.hash(req.body.password, 10)
+  const {
+    name, about, avatar, email,
+  } = req.body;
+  User.findOne({ email }).then((user) => {
+    console.log({ email });
+    if (user) {
+      console.log(user);
+      throw new RegistrError('пользователь с таким email уже зарегестрирован');
+    }
+    return bcrypt.hash(req.body.password, 10);
+  })
     .then((hash) => User.create({
       name, about, avatar, email: req.body.email, password: hash,
-    })).then((user) => res.send(user))
+    })).then((user) => {
+      res.send(user);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const errorList = Object.keys(err.errors);
         const messages = errorList.map((item) => err.errors[item].message);
         next(new BadRequestError(`Ошибка валидации: ${messages.join(' ')}`));
+      } else if (err.statusCode === 409) {
+        next(new RegistrError('пользователь с таким email уже зарегестрирован'));
       } else {
-        next(new BadRequestError('не заполнено одно из полей или заполнено не правильно'));
+        next(new BadRequestError('не заполнено одно или оба поля или заполнены не правильно'));
       }
     });
 };
