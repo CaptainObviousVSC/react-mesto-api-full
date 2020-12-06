@@ -81,6 +81,7 @@ function App() {
         setCards(data)
       })
       api.getInformation(jwt).then((data) => {
+        console.log(data)
         setCurrentUser(data)
       })
        }

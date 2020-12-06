@@ -25,7 +25,10 @@ const getUsers = (req, res, next) => {
 const getUserId = (req, res, next) => {
   User.findById(req.params._id).orFail(() => {
     throw new NotFoundError('Невозможно получить пользователя');
-  }).then((user) => res.status(200).send(user))
+  }).then((user) =>{
+    console.log(user)
+     res.status(200).send(user)
+     })
     .catch((err) => {
       if (err.kind === 'ObjectId') {
         next(new BadRequestError('Невалидный ID'));
@@ -53,16 +56,18 @@ const updateUserAvatar = (req, res, next) => {
     });
 };
 const getUserInfo = (req, res, next) => {
-  const { _id } = req.user;
-  User.findById(_id).orFail(() => {
-    throw new NotFoundError('Невозможно получить информацию о пользователе');
-  }).then((user) => res.status(200).send(user))
+ User.findById(req.user).orFail(() => {
+    throw new NotFoundError('Невозможно получить пользователя');
+  }).then((user) =>{
+    console.log(user)
+     res.status(200).send(user)
+     })
     .catch((err) => {
       if (err.kind === 'ObjectId') {
         next(new BadRequestError('Невалидный ID'));
       }
       if (err.statusCode === 404) {
-        next(new NotFoundError('Невозможно получить информацию о пользователе'));
+        next(new NotFoundError('Невозможно получить пользователя'));
       }
       next();
     });
