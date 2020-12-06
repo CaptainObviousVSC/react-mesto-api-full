@@ -31,7 +31,6 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 app.use('/', authFunction, usersRoutes);
 app.use('/', authFunction, cardsRoutes);
-app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
 app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res, next) => {
@@ -47,3 +46,4 @@ app.use((err, req, res) => {
       : message,
   });
 });
+app.listen(PORT, () => console.log(`App listening on port ${PORT}`));

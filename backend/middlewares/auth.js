@@ -2,7 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
-function authFunction(req, res) {
+function authFunction(req, res, next) {
   const { authorization } = req.headers;
   console.log(authorization);
   if (!authorization || !authorization.startsWith('Bearer ')) {
@@ -23,6 +23,7 @@ function authFunction(req, res) {
   }
 
   req.user = payload;
+  next();
   return payload;
 }
 module.exports = authFunction;
