@@ -25,10 +25,10 @@ const getUsers = (req, res, next) => {
 const getUserId = (req, res, next) => {
   User.findById(req.params._id).orFail(() => {
     throw new NotFoundError('Невозможно получить пользователя');
-  }).then((user) =>{
-    console.log(user)
-     res.status(200).send(user)
-     })
+  }).then((user) => {
+    console.log(user);
+    res.status(200).send(user);
+  })
     .catch((err) => {
       if (err.kind === 'ObjectId') {
         next(new BadRequestError('Невалидный ID'));
@@ -56,12 +56,12 @@ const updateUserAvatar = (req, res, next) => {
     });
 };
 const getUserInfo = (req, res, next) => {
- User.findById(req.user).orFail(() => {
+  User.findById(req.user).orFail(() => {
     throw new NotFoundError('Невозможно получить пользователя');
-  }).then((user) =>{
-    console.log(user)
-     res.status(200).send(user)
-     })
+  }).then((user) => {
+    console.log(user);
+    res.status(200).send(user);
+  })
     .catch((err) => {
       if (err.kind === 'ObjectId') {
         next(new BadRequestError('Невалидный ID'));

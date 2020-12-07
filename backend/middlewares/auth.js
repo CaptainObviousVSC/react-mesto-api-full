@@ -24,6 +24,6 @@ function authFunction(req, res, next) {
 
   req.user = payload;
   next();
-   return payload;
+  return req.user;
 }
 module.exports = authFunction;
