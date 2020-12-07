@@ -19,8 +19,6 @@ router.get('/users/me', celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(validatorLink),
-    // _id: Joi.string().required().max(24),
-    //  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
   }),
 }), getUserInfo);
 router.get('/users/:_id', celebrate({
