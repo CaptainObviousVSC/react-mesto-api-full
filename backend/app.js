@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { errors } = require('celebrate');
+const { errors, Joi, celebrate } = require('celebrate');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -27,21 +27,35 @@ app.get('/crash-test', () => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    password: Joi.string().required(),
+  }),
+}), login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    password: Joi.string().required(),
+  }),
+}), createUser);
 app.use('/', authFunction, usersRoutes);
 app.use('/', authFunction, cardsRoutes);
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res, next) => { 
-  const { statusCode = 500, message } = err; 
- 
-  res 
-    .status(statusCode) 
-    .send({ 
-      message: statusCode === 500 
-        ? 'На сервере произошла ошибка' 
-        : message 
-    }); 
-});   
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+
+  res
+  .status(statusCode)
+  .send({
+    message: statusCode === 500
+      ? 'На сервере произошла ошибка'
+      : message
+  });
+  next()
+});
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));

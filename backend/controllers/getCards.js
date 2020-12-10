@@ -19,7 +19,8 @@ const deleteCard = (req, res, next) => {
   const userId = req.user._id;
   Card.findById(cardId)
     .orFail(() => {
-      throw new NotFoundError('Карточка не найдена');
+      const err = new Error('Карточка не найдена');
+      err.statusCode = 403;
     })
     .then((card) => {
       if (card.owner.toString() === userId) {
@@ -36,7 +37,7 @@ const addLike = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: _id } }, { runValidators: true, new: true }).populate(['likes', 'owner']).orFail(() => {
-    const err = new Error('Невозможно поставить лайк');
+    const err = new NotFoundError('Невозможно поставить лайк');
     err.statusCode = 404;
     throw err;
   }).then((card) => res.status(200).send(card))
@@ -54,7 +55,7 @@ const deleteLike = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: _id } }, { runValidators: true, new: true }).populate(['likes', 'owner']).orFail(() => {
-    const err = new Error('Невозможно удалить лайк');
+    const err = new NotFoundError('Невозможно удалить лайк');
     err.statusCode = 404;
     throw err;
   }).then((card) => res.send(card))

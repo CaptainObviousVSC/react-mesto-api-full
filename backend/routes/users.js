@@ -5,29 +5,11 @@ const {
 } = require('../controllers/getUsers');
 const { validatorLink } = require('../utils/validators');
 
-router.get('/users', celebrate({
-  params: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(validatorLink),
-    _id: Joi.string().required().max(24),
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-  }),
-}), getUsers);
-router.get('/users/me', celebrate({
-  params: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(validatorLink),
-  }),
-}), getUserInfo);
+router.get('/users', getUsers);
+router.get('/users/me', getUserInfo);
 router.get('/users/:_id', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(validatorLink),
-    _id: Joi.string().required().max(24),
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    _id: Joi.string().required().length(24).hex(),
   }),
 }), getUserId);
 router.patch('/users/me/avatar', celebrate({

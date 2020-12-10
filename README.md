@@ -3,3 +3,4 @@
   
 Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
 https://capobvious.azik.students.nomoredomains.monster
+https://api.capobvious.azik.students.nomoredomains.monster
