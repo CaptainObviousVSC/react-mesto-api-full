@@ -29,8 +29,11 @@ const deleteCard = (req, res, next) => {
         throw new BadRequestError('Нельзя удалять чужую карточку');
       }
     })
-    .catch(() => {
-      next();
+    .catch((err) => {
+      if (err.statusCode === 403) {
+        next(new Error('Карточка не найдена'))
+      }
+      next(err);
     });
 };
 const addLike = (req, res, next) => {
