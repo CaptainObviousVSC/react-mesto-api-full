@@ -11,6 +11,7 @@ const cardsRoutes = require('./routes/cards');
 const { createUser, login } = require('./controllers/getUsers');
 const authFunction = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/Loggers');
+const { validatorLink } = require('./utils/validators');
 
 const app = express();
 app.use(cors());
@@ -37,7 +38,7 @@ app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string(),
+    avatar: Joi.string().pattern(validatorLink),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
     password: Joi.string().required(),
   }),

@@ -5,9 +5,6 @@ const BadRequestError = require('../errors/BadRequestError');
 const getCards = (req, res, next) => {
   Card.find({}).then((data) => res.send(data))
     .catch((err) => {
-      if (err.kind === 'ObjectId') {
-        next(new BadRequestError('Невалидный ID'));
-      }
       if (err.statusCode === 404) {
         next(new NotFoundError('Невозможно получить карточки'));
       }
@@ -19,8 +16,9 @@ const deleteCard = (req, res, next) => {
   const userId = req.user._id;
   Card.findById(cardId)
     .orFail(() => {
-      const err = new Error('Карточка не найдена');
+     const err = new Error('доступ запрещен');
       err.statusCode = 403;
+
     })
     .then((card) => {
       if (card.owner.toString() === userId) {
@@ -31,7 +29,9 @@ const deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.statusCode === 403) {
-        next(new Error('Карточка не найдена'))
+        next(new Error('доступ запрещен'))
+      } else if(err.statusCode === 404) {
+ next(new NotFoundError('пользователь не найден'))
       }
       next(err);
     });

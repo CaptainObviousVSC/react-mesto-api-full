@@ -93,15 +93,15 @@ const updateUser = (req, res, next) => {
 };
 const createUser = (req, res, next) => {
   const {
-    name, about, avatar, email,
+    name, about, avatar, email, password,
   } = req.body;
-  User.findOne({ email }).then((user) => {
+  User.findOne({ email }).select('+password').then((user) => {
     console.log({ email });
     if (user) {
       console.log(user);
       throw new RegistrError('пользователь с таким email уже зарегестрирован');
     }
-    return bcrypt.hash(req.body.password, 10);
+    return bcrypt.hash(password, 10);
   })
     .then((hash) => User.create({
       name, about, avatar, email: req.body.email, password: hash,
