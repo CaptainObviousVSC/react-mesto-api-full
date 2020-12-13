@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
+const ForbiddenError = require('../errors/ForbiddenError');
 
 const getCards = (req, res, next) => {
   Card.find({}).then((data) => res.send(data))
@@ -16,22 +17,21 @@ const deleteCard = (req, res, next) => {
   const userId = req.user._id;
   Card.findById(cardId)
     .orFail(() => {
-     const err = new Error('доступ запрещен');
+      const err = new ForbiddenError('Forbidden, доступ запрещен');
       err.statusCode = 403;
-
     })
     .then((card) => {
       if (card.owner.toString() === userId) {
         Card.findByIdAndRemove(cardId).then((cards) => res.status(200).send(cards));
       } else {
-        throw new BadRequestError('Нельзя удалять чужую карточку');
+        throw new ForbiddenError('Forbidden, доступ запрещен');
       }
     })
     .catch((err) => {
       if (err.statusCode === 403) {
-        next(new Error('доступ запрещен'))
-      } else if(err.statusCode === 404) {
- next(new NotFoundError('пользователь не найден'))
+        next(new ForbiddenError('Forbidden, доступ запрещен'));
+      } else if (err.statusCode === 404) {
+        next(new NotFoundError('пользователь или карточка не найдены не найден'));
       }
       next(err);
     });
